@@ -5,19 +5,25 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import cn.hr.dao.PersonDao;
+import cn.hr.model.Person;
 /**
  * 添加人员信息
  * @author 409
  *
  */
-public class Panel11 extends JPanel{
+public class Panel11 extends JPanel implements ActionListener{
 	//JPanel pTitle;  //标题区域面板
 	JPanel pContent;  //添加人员信息内容区域面板
 	JScrollPane js;   //添加人员信息所在的滚动面板
@@ -226,5 +232,38 @@ public class Panel11 extends JPanel{
 		cons.insets = new Insets(10,10,10,10);
 		layout.setConstraints(btnClear, cons);
 		pContent.add(btnClear);
+		btnAdd.addActionListener(this);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==btnAdd) {
+			//从界面获取数据
+			String pid=tfPersonId.getText();
+			String name=tfName.getText();
+			String sex=tfSex.getText();
+			String birth=tfBirth.getText();
+			String nat=tfNat.getText();
+			String address=tfAddress.getText();
+			String DeptName=comboDept.getSelectedItem().toString();
+			String other=tfOther.getText();
+			String[] deptParts=DeptName.split("-");
+			String deptid=deptParts[0];
+			//数据校验
+			
+			//封装Person对象
+		    Person p=new Person();
+		    p.setName(name);
+		    p.setSex(sex);
+		    p.setBirth(birth);
+		    p.setNat(nat);
+		    p.setAddress(address);
+		    p.setDeptID(Long.parseLong(deptid));
+		    p.setOther(other);
+		    p.setAssess("未考核");
+		    //添加到数据库
+		   PersonDao.addPerson(p);
+		   JOptionPane.showMessageDialog(null, "添加人员成功");
+		   }
 	} 
 }

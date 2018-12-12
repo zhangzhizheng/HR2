@@ -1,6 +1,14 @@
 package cn.hr.dao;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import cn.hr.model.Person;
+import cn.hr.utils.DBUtils;
 
 public class PersonDao {
 	/**
@@ -14,21 +22,48 @@ public class PersonDao {
 	 * 员工信息的增加
 	 * @param person
 	 */
-	public void addPerson(Person person){
+	public static void addPerson(Person person){
+		Connection conn=DBUtils.getConnection();
+		String sql="insert into Person(PersonID,Name,Sex,Birth,Nat,Address,DeptID,Assess,Other) "
+				+ "values(?,?,?,?,?,?,?,?,?)";
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			ps=conn.prepareStatement(sql);
+			ps.setLong(1, person.getPersonID());
+			ps.setString(2,person.getName());
+			ps.setString(3, person.getSex());
+			ps.setString(4, person.getBirth());
+			ps.setString(5, person.getNat());
+			ps.setString(6, person.getAddress());
+			ps.setLong(7, person.getDeptID());
+			ps.setString(8, person.getAssess());
+			ps.setString(9, person.getOther());
+			ps.executeUpdate();
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			//关闭连接
+			DBUtils.close(ps);
+			DBUtils.close(conn);
+		}
 		
 	}
 	/**
 	 * 员工信息的修改
 	 * @param person
 	 */
-	public void updatePerson(Person person){
+	public static void updatePerson(Person person){
 		
 	}
 	/**
 	 * 员工信息的删除
 	 * @param personID
 	 */
-	public void deletePerson(long PersonID){
+	public static void deletePerson(long PersonID){
 		
 	}
 	/**

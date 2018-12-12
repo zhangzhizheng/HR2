@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBUtils {
 	public static Connection getConnection() {
@@ -13,33 +14,43 @@ public class DBUtils {
 		try {
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
 			conn = DriverManager.getConnection("jdbc:ucanaccess://Hr.accdb");
+			System.out.println("ok");
 		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("failed");
 		}
 		return conn;
 	}
-	public static void close(ResultSet rs){
-		//关闭相关资源
-		try {
-			if(rs!=null) rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	public static void close(PreparedStatement ps){
-		//关闭相关资源
+	//关闭资源
+	
+	//关闭结果集
+	public static void close(PreparedStatement ps) {
 		try {
 			if(ps!=null) ps.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
-	public static void close(Connection conn){
-		//关闭相关资源
+	//关闭语句
+	//关闭连接
+		public static void close(ResultSet rs) {
+			try {
+				if(rs!=null) rs.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+	//关闭连接
+	public static void close(Connection conn) {
 		try {
 			if(conn!=null) conn.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
+	
 	
 }
